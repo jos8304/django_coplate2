@@ -56,6 +56,9 @@ class Review(models.Model):
 
     def __str__(self):
         return self.title
+    
+    class Meta:
+        ordering = ['-dt_created']
 
 class Comment(models.Model):
     content = models.TextField(max_length=500, blank=False)
@@ -70,6 +73,9 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content[:30]
+    
+    class Meta:
+        ordering = ['-dt_created']
 
 class Like(models.Model):
     dt_created = models.DateTimeField(auto_now_add=True)
