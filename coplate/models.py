@@ -19,7 +19,7 @@ class User(AbstractUser):
 
     intro = models.CharField(max_length=60, blank=True)
 
-    following = models.ManyToManyField("self", symmetrical=False)
+    following = models.ManyToManyField("self", symmetrical=False, blank=True)
 
     def __str__(self):
         return self.email
