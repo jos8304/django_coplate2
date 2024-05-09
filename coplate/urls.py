@@ -16,4 +16,7 @@ urlpatterns = [
     path('users/<int:user_id>/reviews/', views.UserReviewListView.as_view(), name='user-review-list'),
     path('set-profile/', views.ProfileSetView.as_view(), name='profile-set'),
     path('edit-profile/', views.ProfileUpdateView.as_view(), name='profile-update'),
+
+    #comment
+    path('reviews/<int:review_id>/comments/create', views.CommentCreateView.as_view(), name='comment-create'),
 ]
