@@ -1,5 +1,5 @@
 from typing import Any
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.generic import (
     View,
@@ -9,13 +9,13 @@ from django.views.generic import (
     UpdateView, 
     DeleteView
 )
-
+from django.contrib.contenttypes.models import ContentType
 from braces.views import LoginRequiredMixin
 
 from allauth.account.views import PasswordChangeView
 
 from .mixins import LoginAndVerificationRequiredMixin, LoginAndOwnershipRequiredMixin
-from .models import Review, User, Comment
+from .models import Review, User, Comment, Like
 from .forms import ReviewForm, ProfileForm, CommentForm
 
 
@@ -42,6 +42,13 @@ class ReviewDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = CommentForm()
+        context['review_ctype_id'] = ContentType.objects.get(model='review').id
+        context['comment_ctype_id'] = ContentType.objects.get(model='comment').id
+
+        user = self.request.user
+        if user.is_authenticated:
+            review = self.object
+            context['likes_review'] = Like.objects.filter(user=user, review=review).exists()
         return context
 
 
@@ -109,6 +116,20 @@ class CommentDeleteView(LoginAndOwnershipRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse('review-detail', kwargs={'review_id': self.object.review.id})
 
+class ProcessLikeView(LoginAndVerificationRequiredMixin, View):
+    http_method_names=['post']
+
+    def post(self, request, *args, **kwargs):
+        like, created = Like.objects.get_or_create(
+            user=self.request.user,
+            content_type_id = self.kwargs.get('content_type_id'),
+            object_id=self.kwargs.get('object_id'),
+        )
+
+        if not created:
+            like.delete()
+        
+        return redirect(self.request.META['HTTP_REFERER'])
 
 class ProfileView(DetailView):
     model = User
