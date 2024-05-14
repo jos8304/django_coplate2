@@ -107,7 +107,12 @@
               <form action='{% url "process-like" comment_ctype_id comment.id  %}' method='post'>
                 {% csrf_token %}
                 <button class="like-button" type='submit'>
+                  {% if comment in liked_comments  %}
+                  <img width="21px" src="{% static 'coplate/icons/ic-heart-orange.svg' %}" alt="filled like icon">
+                {% else %}
                   <img width="21px" src="{% static 'coplate/icons/ic-heart.svg' %}" alt="like icon">
+                {% endif %}  
+              </form>              
                   <span> 좋아요 {{comment.likes.count }}</span>
                 </button>
               </form>

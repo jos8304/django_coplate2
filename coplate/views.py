@@ -49,6 +49,7 @@ class ReviewDetailView(DetailView):
         if user.is_authenticated:
             review = self.object
             context['likes_review'] = Like.objects.filter(user=user, review=review).exists()
+            context['liked_comments'] = Comment.objects.filter(review=review).filter(likes__user=user)
         return context
 
 
@@ -139,10 +140,57 @@ class ProfileView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user
+        profile_user_id = self.kwargs.get('user_id')
+        if user.is_authenticated:
+            context['is_following'] = user.following.filter(id=profile_user_id).exists()
         context['user_reviews'] = Review.objects.filter(author__id=self.kwargs.get('user_id'))[:4]
+        return context
+    
+class ProcessFollowView(LoginAndVerificationRequiredMixin, View):
+    http_method_names=['post']
+
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        profile_user_id = self.kwargs.get('user_id')
+        if user.following.filter(id=profile_user_id).exists():
+            user.following.remove(profile_user_id)
+        else:
+            user.following.add(profile_user_id)
+
+        return redirect('profile', user_id=profile_user_id)
+    
+class FollowingListView(ListView):
+    model = User
+    template_name = 'coplate/following_list.html'
+    context_object_name = 'following'
+    paginate_by = 10
+
+    def get_queryset(self):
+        profile_user = get_object_or_404(User, pk=self.kwargs.get('user_id'))
+        return profile_user.following.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile_user_id'] = self.kwargs.get('user_id')
         return context
 
 
+class FollowerListView(ListView):
+    model = User
+    template_name = 'coplate/follower_list.html'
+    context_object_name = 'followers'
+    paginate_by = 10
+
+    def get_queryset(self):
+        profile_user = get_object_or_404(User, pk=self.kwargs.get('user_id'))
+        return profile_user.followers.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile_user_id'] = self.kwargs.get('user_id')
+        return context
+    
 class UserReviewListView(ListView):
     model = Review
     template_name = 'coplate/user_review_list.html'

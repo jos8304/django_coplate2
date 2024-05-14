@@ -23,5 +23,10 @@ urlpatterns = [
     path('comments/<int:comment_id>/delete/', views.CommentDeleteView.as_view(), name='comment-delete'),
 
     #Like
-    path('like/<int:content_type_id>/<int:object_id>/',views.ProcessLikeView.as_view(), name='process-like')
+    path('like/<int:content_type_id>/<int:object_id>/',views.ProcessLikeView.as_view(), name='process-like'),
+
+    #follow
+    path('users/<int:user_id>/follow',views.ProcessFollowView.as_view(), name='process-follow'),
+    path('users/<int:user_id>/following/', views.FollowingListView.as_view(), name='following-list'),
+    path('users/<int:user_id>/followers/', views.FollowerListView.as_view(), name='follower-list'),
 ]
