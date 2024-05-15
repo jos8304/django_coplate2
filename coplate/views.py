@@ -11,6 +11,7 @@ from django.views.generic import (
 )
 from django.contrib.contenttypes.models import ContentType
 from braces.views import LoginRequiredMixin
+from django.db.models import Q
 
 from allauth.account.views import PasswordChangeView
 
@@ -23,8 +24,19 @@ class IndexView(View):
     def get(self, request, *args, **kwargs):
         context = {}
         context['latest_reviews'] = Review.objects.all()[:4]
+        user = self.request.user
+        if user.is_authenticated:
+            context['latest_following_reviews'] = Review.objects.filter(author__followers=user)[:4]
         return render(request, 'coplate/index.html', context)
 
+class FollowingReviewListView(LoginRequiredMixin, ListView):
+    model = Review
+    context_object_name = 'following_reviews'
+    template_name = 'coplate/following_review_list.html'
+    paginate_by = 8
+
+    def get_queryset(self):
+        return Review.objects.filter(author__followers=self.request.user)
 
 class ReviewListView(ListView):
     model = Review
@@ -33,6 +45,26 @@ class ReviewListView(ListView):
     paginate_by = 8
     ordering = ['-dt_created']
 
+
+class SearchView(ListView):
+    model = Review
+    context_object_name = 'search_results'
+    template_name = 'coplate/search_results.html'
+    paginate_by = 8
+
+    def get_queryset(self):
+        query = self.request.GET.get('query', '')
+        return Review.objects.filter(
+            Q(title__icontains=query)
+            | Q(restaurant_name__icontains=query)
+            | Q(content__icontains=query)
+        )
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('query', '')
+        return context
+    
 
 class ReviewDetailView(DetailView):
     model = Review

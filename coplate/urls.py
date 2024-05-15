@@ -6,6 +6,7 @@ urlpatterns = [
     # review
     path('', views.IndexView.as_view(), name='index'),
     path('reviews/', views.ReviewListView.as_view(), name='review-list'),
+    path('search/', views.SearchView.as_view(), name='search'),
     path('reviews/<int:review_id>/', views.ReviewDetailView.as_view(), name='review-detail'),
     path('reviews/new/', views.ReviewCreateView.as_view(), name='review-create'),
     path('reviews/<int:review_id>/edit/', views.ReviewUpdateView.as_view(), name='review-update'),
@@ -29,4 +30,6 @@ urlpatterns = [
     path('users/<int:user_id>/follow',views.ProcessFollowView.as_view(), name='process-follow'),
     path('users/<int:user_id>/following/', views.FollowingListView.as_view(), name='following-list'),
     path('users/<int:user_id>/followers/', views.FollowerListView.as_view(), name='follower-list'),
+
+    path('reviews/following/', views.FollowingReviewListView.as_view(), name='following-review-list'),
 ]
