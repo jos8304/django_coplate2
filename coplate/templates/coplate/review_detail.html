@@ -39,7 +39,17 @@
           <img class="carousel-button prev" src="{% static 'coplate/icons/ic-prev.svg' %}">
           <img class="carousel-button next" src="{% static 'coplate/icons/ic-next.svg' %}">
         </div>
+        <div class="thumbnails">
+          <img class="thumb" src="{{ review.image1.url }}" data-index="0">
+          {% if review.image2 %}
+            <img class="thumb inactive" src="{{ review.image2.url }}" data-index="1">
+          {% endif %}
+          {% if review.image3 %}
+            <img class="thumb inactive" src="{{ review.image3.url }}" data-index="2">
+          {% endif %}
+        </div>
       </div>
+      
       <p class="content">{{ review.content|linebreaksbr }}</p>
       <a class="location" target="_blank" href="{{ review.restaurant_link }}">
         <img class="cp-icon" src="{% static 'coplate/icons/ic-pin.svg' %}" alt="Pin Icon">

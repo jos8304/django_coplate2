@@ -468,6 +468,19 @@ input.search-input::placeholder {
   font-weight: bold;
 }
 
+.review-detail .carousel img.thumb {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 18px;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.review-detail .carousel img.thumb.inactive {
+  opacity: 0.3;
+}
+
 .review-detail .content .location > img {
   margin-right: 5px;
 }
