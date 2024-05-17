@@ -415,7 +415,16 @@ input.search-input::placeholder {
   margin: 45px 0 35px;
 }
 
-.review-detail .content .thumb {
+.review-detail .content .carousel {
+  margin-bottom: 30px;
+}
+
+.review-detail .carousel .images {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.review-detail .carousel img.full {
   display: block;
   width: 100%;
   height: 100%;
@@ -426,8 +435,24 @@ input.search-input::placeholder {
   border-radius: 18px;
 }
 
-.review-detail .content .thumb:not(:last-child) {
-  margin-bottom: 30px;
+.review-detail .carousel img.full.hidden {
+  display: none;
+}
+
+.review-detail .carousel .carousel-button {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  cursor: pointer;
+}
+
+.review-detail .carousel .carousel-button.prev {
+  left: 24px;
+}
+
+.review-detail .carousel .carousel-button.next {
+  right: 24px;
 }
 
 .review-detail .content .content {
