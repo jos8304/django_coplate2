@@ -1,6 +1,7 @@
 {% extends "coplate_base/base_with_navbar.html" %}
 
 {% load widget_tweaks %}
+{% load static %}
 
 {% block title %}
 {% if review %}{{ review.title }}{% else %}새 리뷰 작성{% endif %} | Coplate
@@ -31,7 +32,10 @@
     <div class="rating">
       <div class="cp-stars">
         {% for radio in form.rating %}
-          {{ radio }}
+        <label for="{{ radio.id_for_label }}">
+          {{ radio.tag }}
+          ★  
+        </label>
         {% endfor %}
       </div>
       {% for error in form.rating.errors %}
@@ -96,3 +100,9 @@
   </form>
 </main>
 {% endblock content %}
+
+{% block js %}
+<script src="{% static "Coplate/js/starInput.js" %}"></script>
+{% endblock js %}
+
+

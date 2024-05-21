@@ -1,6 +1,7 @@
 {% extends "coplate_base/base_with_header.html" %}
 
 {% load widget_tweaks %}
+{% load static %}
 
 {% block title %}프로필 수정 | Coplate{% endblock title %}
 
@@ -9,10 +10,12 @@
   <form method="post" enctype="multipart/form-data" autocomplete="off">
     {% csrf_token %}
     <div class="profile">
-      <div class="profile-pic cp-avatar large" style="background-image: url('{{ user.profile_pic.url }}')"></div>
-      <div class="file">
-        {{ form.profile_pic }}
+      <div class="profile-pic cp-avatar large" style="background-image: url('{{ user.profile_pic.url }}')">
+        <label class="upload-button" for="id_profile_pic">
+          <img src="{% static 'coplate/icons/ic-upload.svg' %}">
+        </label>
       </div>
+      {{ form.profile_pic }}
     </div>
     <div class="nickname">
       {{ form.nickname|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:닉네임" }}
@@ -33,3 +36,9 @@
   </form>
 </main>
 {% endblock content %}
+
+{% block js %}
+<script src="{% static "Coplate/js/profileImageUpload.js" %}"></script>
+{% endblock js %}
+
+

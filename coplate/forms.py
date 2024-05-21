@@ -30,6 +30,7 @@ class ProfileForm(forms.ModelForm):
             'intro',
         ]
         widgets = {
+            'profile_pic': forms.FileInput,
             'intro': forms.Textarea,
         }
 
