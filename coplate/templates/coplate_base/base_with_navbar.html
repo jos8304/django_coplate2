@@ -14,8 +14,10 @@
           {% if user.is_staff %}
             <li><a href="{% url 'admin:index' %}">관리자</a></li>
           {% endif %}
-          <li><a href="{% url 'profile' user.id %}">내 프로필</a></li>
-          <li><a href="{% url 'account_logout' %}">로그아웃</a></li>
+          {% comment %} <li><a href="{% url 'profile' user.id %}">내 프로필</a></li>
+          <li><a href="{% url 'account_logout' %}">로그아웃</a></li> {% endcomment %}
+          <li><a href="{% url 'review-create' %}">리뷰 작성</a></li>
+          <li><div class="cp-avatar" style="background-image: url('{{ user.profile_pic.url }}')"></div></li>
         {% else %}
           <li><a href="{% url 'account_login' %}">로그인</a></li>
           <li><a href="{% url 'account_signup' %}">회원가입</a></li>
@@ -34,3 +36,16 @@
   </div>
 </footer>
 {% endblock footer %}
+
+{% block basejs %}
+{% if user.is_authenticated %}
+  <script>
+    const profileURL = "{% url 'profile' user.id %}"
+    const logoutURL = "{% url 'account_logout' %}"
+  </script>
+  <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+  <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+  <script src="{% static "coplate/js/profileMenu.js" %}"></script>
+{% endif %}
+{% endblock basejs %}
+

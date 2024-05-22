@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'coplate/styles/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'coplate/styles/theme.css' %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'coplate/favicon/favicon.ico' %}">
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light.css"/>
 
     <title>{% block title %}Coplate{% endblock title %}</title>
   </head>
@@ -16,6 +17,7 @@
     {% block header %}{% endblock header %}
     {% block content %}{% endblock content %}
     {% block footer %}{% endblock footer %}
+    {% block basejs %}{% endblock basejs %}
     {% block js %}{% endblock js %}
   </body>
 </html>
